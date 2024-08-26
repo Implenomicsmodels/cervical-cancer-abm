@@ -1,0 +1,55 @@
+﻿Category,Type,Age_Group,Run Value
+HPV - CIN1 - Prev - 16,Prevalence,20_25,8.7685
+HPV - CIN1 - Prev - 16,Prevalence,25_30,10.8304
+HPV - CIN1 - Prev - 16,Prevalence,30_40,6.0814
+HPV - CIN1 - Prev - 16,Prevalence,40_50,5.4173
+HPV - CIN1 - Prev - 16,Prevalence,50_60,5.5925
+,,,
+,,,
+HPV - CIN1 - Prev - 18,Prevalence,20_25,3.5345
+HPV - CIN1 - Prev - 18,Prevalence,25_30,4.0651
+HPV - CIN1 - Prev - 18,Prevalence,30_40,4.8818
+HPV - CIN1 - Prev - 18,Prevalence,40_50,4.2557
+HPV - CIN1 - Prev - 18,Prevalence,50_60,4.1859
+,,,
+HPV - CIN1 - Prev - HR,Prevalence,20_25,34.7369
+HPV - CIN1 - Prev - HR,Prevalence,25_30,30.4183
+HPV - CIN1 - Prev - HR,Prevalence,30_40,30.2976
+HPV - CIN1 - Prev - HR,Prevalence,40_50,18.4108
+HPV - CIN1 - Prev - HR,Prevalence,50_60,19.7055
+,,,
+HPV - CIN2 - Prev - 16,Prevalence,20_25,35.0969
+HPV - CIN2 - Prev - 16,Prevalence,25_30,35.637
+HPV - CIN2 - Prev - 16,Prevalence,30_40,36.6345
+HPV - CIN2 - Prev - 16,Prevalence,40_50,27.861
+HPV - CIN2 - Prev - 16,Prevalence,50_60,26.2002
+,,,
+HPV - CIN2 - Prev - 18,Prevalence,20_25,5.1379
+HPV - CIN2 - Prev - 18,Prevalence,25_30,7.7522
+HPV - CIN2 - Prev - 18,Prevalence,30_40,6.6729
+HPV - CIN2 - Prev - 18,Prevalence,40_50,5.8463
+HPV - CIN2 - Prev - 18,Prevalence,50_60,5.7777
+,,,
+HPV - CIN2 - Prev - HR,Prevalence,20_25,47.3041
+HPV - CIN2 - Prev - HR,Prevalence,25_30,41.846
+HPV - CIN2 - Prev - HR,Prevalence,30_40,45.6776
+HPV - CIN2 - Prev - HR,Prevalence,40_50,42.6216
+HPV - CIN2 - Prev - HR,Prevalence,50_60,40.7807
+,,,
+HPV - CIN3 - Prev - 16,Prevalence,20_25,65.9216
+HPV - CIN3 - Prev - 16,Prevalence,25_30,52.6207
+HPV - CIN3 - Prev - 16,Prevalence,30_40,44.3667
+HPV - CIN3 - Prev - 16,Prevalence,40_50,42.5564
+HPV - CIN3 - Prev - 16,Prevalence,50_60,39.8031
+,,,
+HPV - CIN3 - Prev - 18,Prevalence,20_25,3.3705
+HPV - CIN3 - Prev - 18,Prevalence,25_30,4.5158
+HPV - CIN3 - Prev - 18,Prevalence,30_40,5.9663
+HPV - CIN3 - Prev - 18,Prevalence,40_50,4.7095
+HPV - CIN3 - Prev - 18,Prevalence,50_60,5.136
+,,,
+HPV - CIN3 - Prev - HR,Prevalence,20_25,32.1953
+HPV - CIN3 - Prev - HR,Prevalence,25_30,27.1506
+HPV - CIN3 - Prev - HR,Prevalence,30_40,31.9967
+HPV - CIN3 - Prev - HR,Prevalence,40_50,40.7706
+HPV - CIN3 - Prev - HR,Prevalence,50_60,35.8981

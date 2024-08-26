@@ -24,7 +24,7 @@ def main(args):
     cm = read_cm(experiment_dir)
     analysis_file = "iteration_0/analysis_values.csv"
 
-    num_agents = 100_000
+    num_agents = 500_000
     values = [0.01, 0.05, 0.1, 0.25, 0.4, 0.6, 0.8, 1, 1.33, 1.67, 2, 2.5, 3, 3.5, 4, 4.5, 5, 7.5, 10, 12.5]
 
     # ----- Start the Calibration --------------------------------------------------------------------------------------

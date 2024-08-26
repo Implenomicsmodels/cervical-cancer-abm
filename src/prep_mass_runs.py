@@ -37,7 +37,7 @@ if __name__ == "__main__":
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("country", type=str, default="all", help="Name of the country.")
-    parser.add_argument("--num_agents", default=100_000)
+    parser.add_argument("--num_agents", default=500_000)
     parser.add_argument("--n", type=int, default=10, help="number of runs to generate (default: %(default)s)")
     parser.add_argument(
         "--test_params", type=str, default="False", help="Should parameters be tested?. (default: %(default)s)"

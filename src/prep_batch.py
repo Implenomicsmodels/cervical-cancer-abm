@@ -1,5 +1,7 @@
 import argparse
 import importlib
+import numpy as np
+import pandas as pd
 from pathlib import Path
 
 from model.parameters import Parameters
@@ -19,7 +21,7 @@ class Values:
     """
 
     base = {
-        "num_agents": 100_000,
+        "num_agents": 500_000,
         "num_steps": 1092,
         "steps_per_year": 12,
         "initial_age": 9,
@@ -166,3 +168,19 @@ if __name__ == "__main__":
             main(batch=args.batch, country=country)
     else:
         main(batch=args.batch, country=args.country)
+
+    if args.country == "usa":
+        d = Path('experiments/usa/transition_dictionaries/')
+        pickle_files = sorted(d.glob('*p[1-3]*.pickle'))
+        csv_files = [
+            'cervical_cancer_incidence.csv',
+            'hpv_cin_prevalence.csv',
+            'mortality.csv'
+        ]
+        o = Path('experiments/usa/batch_10/')
+        o.mkdir(parents=True, exist_ok=True)
+        g = lambda x: x + np.random.normal(0.1 * x, 0.05 * x)
+        for pickle_file, csv_file in zip(pickle_files, csv_files):
+            df = pd.read_pickle(pickle_file)
+            df['Run Value'] = df['Run Value'].apply(g)
+            df.to_csv(o / csv_file, index=False)

@@ -46,7 +46,7 @@ You can run one iteration of a scenario with:
 python run.py experiments/zambia/scenario_base
 ```
 
-You can run one `x` iterations of a scenario and use multiprocessing with:
+You can run `x` iterations of a scenario and use multiprocessing with:
 
 ```bash
 python run.py experiments/zambia/scenario_base --n=x --cpus=2

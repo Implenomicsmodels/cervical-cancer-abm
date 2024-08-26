@@ -118,7 +118,7 @@ def analyze(scenario_dir: Path, iteration: int = 0):
     # ------------------------------------------------------------------------------------------------------------------
     # Cancer Incidence
     analysis = Analysis(scenario_dir, iteration)
-    ci = 100_000 * analysis.incidence(CancerState.id, CancerState.LOCAL.value)
+    ci = 500_000 * analysis.incidence(CancerState.id, CancerState.LOCAL.value)
     cancer_age_groups = [15, 40, 45, 50, 55, 60]
     for i in range(len(cancer_age_groups) - 1):
         age_range = range(cancer_age_groups[i], cancer_age_groups[i + 1])

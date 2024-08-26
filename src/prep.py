@@ -42,7 +42,7 @@ def main(args):
     # ----- Life matrix: Monthly probability of dying from all causes
     file = base_documents_dir.joinpath("data/mortality.csv")
     if is_zambia:
-        baseline = make_baseline(pd.read_csv(file)[["age", "no_hiv", "hiv"]], per=100_000, end=50)
+        baseline = make_baseline(pd.read_csv(file)[["age", "no_hiv", "hiv"]], per=500_000, end=50)
         # Fit a rough exponential model for extrapolating beyond age 75. Instead of fitting a true model, we'll just
         # estimate the slope on the log scale and extend that out. Prior inspection of the data reveals that this
         # method should produce an adequate extrapolation.

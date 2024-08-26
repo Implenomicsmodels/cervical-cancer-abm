@@ -97,7 +97,7 @@ def run_analysis(scenario_dir: Path, iteration: int):
 
     # ----- The Cancer Incidence Targets -------------------------------------------------------------------------------
     # (13) ----- Cancer Incidence Overall
-    df = 100_000 * analysis.incidence(CancerState.id, CancerState.LOCAL.value)
+    df = 500_000 * analysis.incidence(CancerState.id, CancerState.LOCAL.value)
     results_df = results_df.append(combine_age_groups(df=df, ages=cancer_age_groups, target="Cancer_Inc").loc[0:6])
 
     # ----- Where did the Cancer come from -----------------------------------------------------------------------------

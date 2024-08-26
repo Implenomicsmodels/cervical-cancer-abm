@@ -1,0 +1,45 @@
+hiv_detection_rate: 1
+include_hiv: true
+initial_age: 9
+num_agents: 500000
+num_steps: 1092
+screening:
+  age_routine_end: 49
+  age_routine_start: 25
+  cancer_inspection:
+    cost: 3.0
+    sensitivity: 1.0
+    specificity: 1.0
+  compliance:
+    never: 0.2
+    never_surveillance: 0.0
+  dna:
+    cost: 18.0
+    sensitivity: 0.9
+    specificity: 0.57
+  interval_hiv: 3
+  interval_re_test: 1
+  interval_routine: 5
+  interval_surveillance: 1
+  protocol: none
+  via:
+    cost: 3.0
+    sensitivity: 0.73
+    specificity: 0.75
+seed: 1111
+steps_per_year: 12
+treatment:
+  cancer_cost_distant: 1146.0
+  cancer_cost_local: 1186.0
+  cancer_cost_regional: 1389.0
+  cryo:
+    cost: 2.0
+    effectiveness: 0.88
+    proportion: 0.85
+  leep:
+    cost: 32.0
+    effectiveness: 0.94
+    proportion: 0.15
+vaccination:
+  cost: 15.0
+  schedule: {}

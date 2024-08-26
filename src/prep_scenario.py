@@ -336,7 +336,7 @@ def prepare_scenario(
     use_selected: bool = False,
     test_multipliers: bool = False,
     seed: int = 1111,
-    num_agents: int = 100_000,
+    num_agents: int = 500_000,
 ):
     """ Prepare a scenario
     """
