@@ -6,7 +6,9 @@ from enum import IntEnum, Enum, unique, auto
 
 class EventState:
     def __init__(
-        self, enum: IntEnum, transition_dict: dict,
+        self,
+        enum: IntEnum,
+        transition_dict: dict,
     ):
         # --- inputs
         self.enum = enum
@@ -23,8 +25,7 @@ class EventState:
         self.values.fill(state.value)
 
     def find_probabilities(self, keys: List[tuple]) -> np.array:
-        """ Given a set of keys, create a list of probabilities
-        """
+        """Given a set of keys, create a list of probabilities"""
 
         # Return the probabilities
         probabilities = np.zeros(len(keys))
@@ -39,8 +40,7 @@ class GenericState(IntEnum):
 
 
 class Empty:
-    """ An empty state to house extra arrays or dictionaries
-    """
+    """An empty state to house extra arrays or dictionaries"""
 
     def __init__(self, data_type):
         self.data_type = data_type
@@ -53,6 +53,15 @@ class HpvState(GenericState):
     CIN_1 = auto()
     CIN_2_3 = auto()
     CANCER = auto()
+
+
+@unique
+class CervicalLesionState(GenericState):
+    NORMAL = auto()
+    ASCUS = auto()
+    LSIL = auto()
+    ASCH = auto()
+    HSIL = auto()
 
 
 @unique
@@ -113,6 +122,7 @@ CancerState.id = "cancer"
 CancerDetectionState.id = "cancer_detection"
 TimeSinceCancerDetectionState.id = "time_since_cancer_detection"
 LifeState.id = "life"
+CervicalLesionState.id = "lesion"
 
 HpvState.int = 0
 HpvStrain.int = 1
@@ -122,6 +132,7 @@ CancerState.int = 4
 CancerDetectionState.int = 5
 TimeSinceCancerDetectionState.int = 6
 LifeState.int = 7
+CervicalLesionState.int = 8
 AgeGroup = GenericState("AgeGroup", {"AGE_{}".format(a): a for a in range(9, 101)})
 
 # HPV Strains
@@ -132,7 +143,16 @@ HpvStrain.LOW_RISK.int = 22
 
 # Integer_map
 int_map = {}
-for item in [HpvState, HpvStrain, HpvImmunity, HivState, CancerState, CancerDetectionState, LifeState]:
+for item in [
+    HpvState,
+    HpvStrain,
+    HpvImmunity,
+    HivState,
+    CancerState,
+    CancerDetectionState,
+    LifeState,
+    CervicalLesionState,
+]:
     int_map[item.int] = item.id
 int_map[TimeSinceCancerDetectionState.int] = TimeSinceCancerDetectionState.id
 for item in HpvStrain:

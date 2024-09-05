@@ -34,7 +34,9 @@ class ParameterContainer:
         params = {}
         if params_file.exists():
             with params_file.open(mode="r") as f:
-                params = yaml.safe_load(f)  # safe_load() returns None if the file is empty.
+                params = yaml.safe_load(
+                    f
+                )  # safe_load() returns None if the file is empty.
             if params is None:
                 params = {}
         else:
