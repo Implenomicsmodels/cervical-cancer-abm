@@ -168,7 +168,9 @@ class Analysis:
 
             cin_1 - Whether the most advanced HPV state is HpvState.CIN_1. Available states are True and False.
 
-            cin_2_3 - Whether the most advanced HPV state is HpvState.CIN_2_3. Available states are True and False.
+            cin_2 - Whether the most advanced HPV state is HpvState.CIN_2. Available states are True and False.
+
+            cin_3 - Whether the most advanced HPV state is HpvState.CIN_3. Available states are True and False.
         """
         self.agent_timeline["hpv_max"] = (
             self.agent_timeline[[HpvStrain(strain).name for strain in HpvStrain]].max(axis=1).astype("category")
@@ -184,8 +186,8 @@ class Analysis:
         self.agent_timeline["hpv_16_18_high"] = test1 & test2
 
         self.agent_timeline["cin_1"] = self.agent_timeline["hpv_max"] == HpvState.CIN_1.value
-
-        self.agent_timeline["cin_2_3"] = self.agent_timeline["hpv_max"] == HpvState.CIN_2_3.value
+        self.agent_timeline["cin_2"] = self.agent_timeline["hpv_max"] == HpvState.CIN_2.value
+        self.agent_timeline["cin_3"] = self.agent_timeline["hpv_max"] == HpvState.CIN_3.value
 
     def fix_alive_count(self, count_alive):
         alive_count = count_alive.rolling(2).mean()

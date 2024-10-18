@@ -139,7 +139,7 @@ class CervicalModel:
 
     def load_agents(self):
         """ Add the agents to the model based on parameter inputs
-        Order matters here, as some states rely on otherss
+        Order matters here, as some states rely on others
         """
         num_agents = self.params.num_agents
         self.age = self.params.initial_age

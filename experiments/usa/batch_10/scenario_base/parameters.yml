@@ -1,7 +1,7 @@
 hiv_detection_rate: 1
 include_hiv: true
 initial_age: 9
-num_agents: 500000
+num_agents: 5000
 num_steps: 1092
 screening:
   age_routine_end: 49

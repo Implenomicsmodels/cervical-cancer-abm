@@ -47,18 +47,18 @@ However, when we apply this to a region/country whose actual prevalence targets 
 
 <img src="zambia/base_documents/data/curves.jpg " alt="alt text" width="550" height="350">
 
-[This file](multipliers.csv) contains one iteration of the original Goldhaber multipliers. Since we are in a different region, we have adjusted the range of potential multipliers. We used subject matter expertese to help find good starting values.
+[This file](multipliers.csv) contains one iteration of the original Goldhaber multipliers. Since we are in a different region, we have adjusted the range of potential multipliers. We used subject matter expertise to help find good starting values.
 
 ### Understanding the Calibration Process
 
 Previous Zambian versions (1, 2, and 3) followed a very complex calibration process. We have simplified this as much as possible. Here is the general overview
 
 * We select the middle value of all the "standard multipliers" and fix them for the entire curve calibration process
-* Each multiplier is calibrated in a specfic order. The age group of the first strain must be finished before the corresponding age group of the next strain starts(16 -> HR -> 18 -> LR)
+* Each multiplier is calibrated in a specific order. The age group of the first strain must be finished before the corresponding age group of the next strain starts(16 -> HR -> 18 -> LR)
 * Age groups are completed in order
 * We cast a wide net of multipliers from 0.01 to 10 for each
 * We compare the results from the calibration runs, to the desired targets
 * We build a predictive model using the target values as the X, and multipliers as the Y
-* We plug in our desired target into the model and recieve a predicted multiplier to use
+* We plug in our desired target into the model and receive a predicted multiplier to use
 * This multiplier is saved and used for that specific curve multiplier going forward
 * We move to the next age group or strain and repeat this process

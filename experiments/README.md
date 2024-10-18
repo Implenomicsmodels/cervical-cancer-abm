@@ -37,7 +37,7 @@ We need to use multipliers to calibrate to these targets. There are two types:
 
 2. Check the targets: 
 
-	- ```python src/check_targets.py experiments/<country>```
+	- ```python src/check_targets.py <country>```
 	
 3. Update triangle distributions (manual process)
 

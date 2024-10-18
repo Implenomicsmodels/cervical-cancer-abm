@@ -191,7 +191,7 @@ def update_and_save_hiv(baseline_dir: Path, scenario_dir: Path) -> None:
 
 
 def update_hpv(hpv_dict: dict, base_updates: list, cm_df: pd.DataFrame) -> dict:
-    """ Update the HPV probabilty dictionary using a list of updates
+    """ Update the HPV probability dictionary using a list of updates
     """
     hpv_dict_copy = deepcopy(hpv_dict)
 
@@ -267,14 +267,16 @@ def update_hpv(hpv_dict: dict, base_updates: list, cm_df: pd.DataFrame) -> dict:
                     for key in keys:
                         hpv_dict_copy[key][list_location] *= multiplier
 
-            # ----- CIN23
-            if temp_row.State == "CIN23":
-                # This singular multiple effects 4 rows
+            # ----- CIN2 and CIN3
+            if temp_row.State in ["CIN2", "CIN3"]:
+                cin_state = HpvState.CIN_2 if temp_row.State == "CIN2" else HpvState.CIN_3
+                # This singular multiple effects 5 rows for each CIN state
                 combinations = [
-                    (HpvState.HPV.value, HpvState.CIN_2_3),  # 2. HPV -> CIN_2_3
-                    (HpvState.CIN_1.value, HpvState.CIN_2_3.value),  # 3. CIN_1 -> CIN_2_3
-                    (HpvState.CIN_2_3.value, HpvState.CIN_1.value),  # 4. CIN_2_3 -> CIN_1
-                    (HpvState.CIN_2_3.value, HpvState.NORMAL.value),  # 5. CIN_2_3 -> NORMAL
+                    (HpvState.HPV.value, cin_state.value),  # HPV -> CIN_2 or CIN_3
+                    (HpvState.CIN_1.value, cin_state.value),  # CIN_1 -> CIN_2 or CIN_3
+                    (cin_state.value, HpvState.CIN_1.value),  # CIN_2 or CIN_3 -> CIN_1
+                    (cin_state.value, HpvState.NORMAL.value),  # CIN_2 or CIN_3 -> NORMAL
+                    (HpvState.CIN_2.value, HpvState.CIN_3.value) if cin_state == HpvState.CIN_3 else (HpvState.CIN_3.value, HpvState.CIN_2.value),  # CIN_2 <-> CIN_3
                 ]
                 for combo in combinations:
                     filters = {
@@ -293,16 +295,17 @@ def update_hpv(hpv_dict: dict, base_updates: list, cm_df: pd.DataFrame) -> dict:
 
             # ----- CANCER
             if temp_row.State == "CANCER":
-                # This singular multiple effects 1 row
-                filters = {
-                    0: [AgeGroup[value].value],  # Age
-                    3: [HpvState.CIN_2_3.value],  # Current Hpv State
-                }
-                keys = find_all_keys(hpv_dict.keys(), filters)
-                multiplier = temp_row["Current"]
-                list_location = HpvState.CANCER.value - 1
-                for key in keys:
-                    hpv_dict_copy[key][list_location] *= multiplier
+                # This singular multiple effects 2 rows now (from CIN2 and CIN3)
+                for cin_state in [HpvState.CIN_2, HpvState.CIN_3]:
+                    filters = {
+                        0: [AgeGroup[value].value],  # Age
+                        3: [cin_state.value],  # Current Hpv State
+                    }
+                    keys = find_all_keys(hpv_dict.keys(), filters)
+                    multiplier = temp_row["Current"]
+                    list_location = HpvState.CANCER.value - 1
+                    for key in keys:
+                        hpv_dict_copy[key][list_location] *= multiplier
 
     # ----- Normalize all of the probabilities back to 1
     for key in hpv_dict_copy.keys():

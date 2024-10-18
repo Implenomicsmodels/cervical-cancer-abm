@@ -6,23 +6,19 @@ import pandas as pd
 
 
 def combine_age_groups(df, ages, target):
-    average = []
-    for i in range(len(ages) - 1):
-        age_range = range(ages[i], ages[i + 1])
-        value = round(df.loc[age_range].mean(), 4)
-        average.append(value)
-
-    age = []
-    for i in range(len(ages) - 2):
-        age.append(str(ages[i]) + "_" + str(ages[i + 1]))
-    age.append(str(ages[len(ages) - 2]) + "+")
-
-    df_final = pd.DataFrame()
-    df_final["Age"] = age
-    df_final["Model"] = average
-    df_final.insert(loc=0, column="Target", value=target)
-
-    return df_final
+    # Calculate averages for age ranges
+    average = [round(df.loc[ages[i]:ages[i+1]-1].mean(), 4) for i in range(len(ages) - 1)]
+    
+    # Create age group labels
+    age_groups = [f"{ages[i]}_{ages[i+1]}" for i in range(len(ages) - 2)]
+    age_groups.append(f"{ages[-2]}+")
+    
+    # Create and return the final DataFrame
+    return pd.DataFrame({
+        "Target": target,
+        "Age": age_groups,
+        "Model": average
+    })
 
 
 def get_pool_count():
@@ -35,6 +31,7 @@ def get_pool_count():
 
 def multi_process(a_function, run_list, logger, info_id):
     pool_count = get_pool_count()
+    logger.info(f"Using {pool_count} cores for multiprocessing.")
     with multiprocessing.Pool(pool_count) as pool:
         tasks = []
         for item in run_list:

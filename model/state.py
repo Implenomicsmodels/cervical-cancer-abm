@@ -51,7 +51,8 @@ class HpvState(GenericState):
     NORMAL = auto()
     HPV = auto()
     CIN_1 = auto()
-    CIN_2_3 = auto()
+    CIN_2 = auto()
+    CIN_3 = auto()
     CANCER = auto()
 
 

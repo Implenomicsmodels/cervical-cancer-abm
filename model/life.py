@@ -9,7 +9,7 @@ class Life(EventState):
     def __init__(self, model):
         """ Life Status Tracker
             - Probability of dying is based on age and cancer status and should be updated:
-                - Yearly (when the model changes the womens ages)
+                - Yearly (when the model changes the women's ages)
                 - On cancer status event change
         """
         with open(model.transition_dir.joinpath("life_dictionary.pickle"), "rb") as openfile:

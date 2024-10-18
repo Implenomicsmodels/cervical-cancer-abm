@@ -1,65 +1,98 @@
 from pathlib import Path
 
 import pandas as pd
+import numpy as np
 from model.analysis import Analysis
-from model.state import CancerState, HpvState, HpvStrain
+from model.state import CancerState, HpvState, HpvStrain, LifeState
 
 from src.helper_functions import combine_age_groups
-
+import logging
 
 def run_analysis(scenario_dir: Path, iteration: int):
+    """
+    Run analysis for the USA scenario and generate target values.
 
+    This function performs various analyses on HPV prevalence, CIN2/3 prevalence,
+    cancer incidence, and cause of cancer. It generates target values for different
+    age groups and HPV strains, and saves the results to a CSV file.
+
+    Args:
+        scenario_dir (Path): The directory path for the scenario being analyzed.
+        iteration (int): The iteration number of the analysis.
+
+    Returns:
+        None
+
+    Side effects:
+        - Creates a CSV file named 'analysis_values.csv' in the iteration directory.
+        - Logs information and debug messages using the logging module.
+
+    The function performs the following analyses:
+    1. HPV Prevalence for low-risk, high-risk, HPV-16, and HPV-18 strains.
+    2. CIN2/3 Prevalence for high-risk, HPV-16, and HPV-18 strains.
+    3. Cancer Incidence.
+    4. Cause of Cancer for HPV-16, HPV-18, and high-risk strains.
+
+    Results are combined into a single DataFrame and saved as a CSV file.
+    """
+    
+    logging.basicConfig(level=logging.DEBUG)  # Changed to DEBUG for more detailed logs
+    logger = logging.getLogger(__name__)
+    
+    logger.info(f"Starting USA analysis for scenario: {scenario_dir}, iteration: {iteration}")
+    
     analysis = Analysis(scenario_dir, iteration)
 
     hpv_age_groups = [20, 30, 40, 50, 60, 100]
     cin23_age_groups = [20, 25, 30, 40, 50, 60, 80, 100]
     cancer_age_groups = [20, 30, 40, 50, 60, 70, 100]
 
-    # ----- The HPV Prevalence Targets -------------------------------------------------------------------------------
-    # (1) ----- Low-Risk HPV Prevalence
-    df = analysis.prevalence(field=HpvStrain.LOW_RISK.name, states=(HpvState.HPV.value,),)
-    results_df = combine_age_groups(df=df * 100, ages=hpv_age_groups, target="HPV_LR").loc[0:3]
-    # (2) ----- High-Risk HPV Prevalence
-    df = analysis.prevalence(field=HpvStrain.HIGH_RISK.name, states=(HpvState.HPV,),)
-    results_df = results_df.append(combine_age_groups(df=df * 100, ages=hpv_age_groups, target="HPV_HR").loc[0:3])
-    # (3) ----- 16
-    df = analysis.prevalence(field=HpvStrain.SIXTEEN.name, states=(HpvState.HPV,),)
-    results_df = results_df.append(combine_age_groups(df=df * 100, ages=hpv_age_groups, target="HPV_16").loc[0:3])
-    # (4) ----- 18
-    df = analysis.prevalence(field=HpvStrain.EIGHTEEN.name, states=(HpvState.HPV,),)
-    results_df = results_df.append(combine_age_groups(df=df * 100, ages=hpv_age_groups, target="HPV_18").loc[0:3])
+    results = []
 
-    # ----- The 6 CIN23 Prevalence Targets -----------------------------------------------------------------------------
-    # (5) ----- High-Risk
-    df = analysis.prevalence(field=HpvStrain.HIGH_RISK.name, states=(HpvState.CIN_2_3,),)
-    results_df = results_df.append(combine_age_groups(df=df * 100, ages=cin23_age_groups, target="CIN23_HR").loc[0:5])
-    # (6) ----- SIXTEEN
-    df = analysis.prevalence(field=HpvStrain.SIXTEEN.name, states=(HpvState.CIN_2_3,),)
-    results_df = results_df.append(combine_age_groups(df=df * 100, ages=cin23_age_groups, target="CIN23_16").loc[0:5])
-    # (7) ----- EIGHTEEN
-    df = analysis.prevalence(field=HpvStrain.EIGHTEEN.name, states=(HpvState.CIN_2_3,),)
-    results_df = results_df.append(combine_age_groups(df=df * 100, ages=cin23_age_groups, target="CIN23_18").loc[0:5])
+    # HPV Prevalence Targets
+    for strain, target in [
+        (HpvStrain.LOW_RISK, "HPV_LR"),
+        (HpvStrain.HIGH_RISK, "HPV_HR"),
+        (HpvStrain.SIXTEEN, "HPV_16"),
+        (HpvStrain.EIGHTEEN, "HPV_18")
+    ]:
+        df = analysis.prevalence(field=strain.name, states=(HpvState.HPV.value,))
+        results.append(combine_age_groups(df=df * 100, ages=hpv_age_groups, target=target).iloc[:4])
 
-    # ----- The Cancer Incidence Targets -------------------------------------------------------------------------------
-    # (8) ----- Cancer Incidence Overall
+    # CIN2 and CIN3 Prevalence Targets
+    for strain, target_prefix in [
+        (HpvStrain.HIGH_RISK, "CIN"),
+        (HpvStrain.SIXTEEN, "CIN"),
+        (HpvStrain.EIGHTEEN, "CIN")
+    ]:
+        for cin_state, cin_suffix in [(HpvState.CIN_2, "2"), (HpvState.CIN_3, "3")]:
+            df = analysis.prevalence(field=strain.name, states=(cin_state.value,))
+            target = f"{target_prefix}{cin_suffix}_{strain.name.split('_')[-1]}"
+            results.append(combine_age_groups(df=df * 100, ages=cin23_age_groups, target=target).iloc[:6])
+
+    # Cancer Incidence Targets
     df = 500_000 * analysis.incidence(CancerState.id, CancerState.LOCAL.value)
-    results_df = results_df.append(combine_age_groups(df=df, ages=cancer_age_groups, target="Cancer_Inc"))
+    results.append(combine_age_groups(df=df, ages=cancer_age_groups, target="Cancer_Inc"))
 
-    # ----- Where did the Cancer come from -----------------------------------------------------------------------------
-    # (9) ----- Cause of Cancer
-    cancer_16 = list(analysis.agent_events[HpvStrain.SIXTEEN.name]["To"].values).count(HpvState.CANCER.value)
-    cancer_18 = list(analysis.agent_events[HpvStrain.EIGHTEEN.name]["To"].values).count(HpvState.CANCER.value)
-    cancer_hr = list(analysis.agent_events[HpvStrain.HIGH_RISK.name]["To"].values).count(HpvState.CANCER.value)
-    cancer_total = max(sum([cancer_16, cancer_18, cancer_hr]), 1)
-    percent_16 = cancer_16 / cancer_total
-    percent_18 = cancer_18 / cancer_total
-    percent_hr = cancer_hr / cancer_total
-    temp_df = pd.DataFrame()
-    temp_df["Target"] = ["Cause of Cancer: 16", "Cause of Cancer: 18", "Cause of Cancer: HR"]
-    temp_df["Age"] = "N/A"
-    temp_df["Model"] = [percent_16, percent_18, percent_hr]
-    results_df = results_df.append(temp_df).reset_index(drop=True)
+    # Cause of Cancer
+    cancer_counts = {
+        strain: np.sum(analysis.agent_events[strain.name]["To"] == HpvState.CANCER.value)
+        for strain in [HpvStrain.SIXTEEN, HpvStrain.EIGHTEEN, HpvStrain.HIGH_RISK]
+    }
+    cancer_total = max(sum(cancer_counts.values()), 1)
+    for strain, count in cancer_counts.items():
+        results.append(pd.DataFrame({
+            "Target": [f"Cause of Cancer: {strain.name}"],
+            "Age": ["N/A"],
+            "Model": [count / cancer_total]
+        }))
 
-    # ---- Save as CSV
+    # Combine all results
+    results_df = pd.concat(results, ignore_index=True)
+
+    # Save as CSV
+    output_file = analysis.iteration_dir.joinpath("analysis_values.csv")
+    logger.info(f"Saving analysis_values.csv to {output_file}")
     results_df.columns = ["Target", "Age", str(iteration)]
-    results_df.to_csv(analysis.iteration_dir.joinpath("analysis_values.csv"), index=False)
+    results_df.to_csv(output_file, index=False)
+    logger.info("Analysis complete")

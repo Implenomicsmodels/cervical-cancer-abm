@@ -169,18 +169,18 @@ if __name__ == "__main__":
     else:
         main(batch=args.batch, country=args.country)
 
-    if args.country == "usa":
-        d = Path('experiments/usa/transition_dictionaries/')
-        pickle_files = sorted(d.glob('*p[1-3]*.pickle'))
-        csv_files = [
-            'cervical_cancer_incidence.csv',
-            'hpv_cin_prevalence.csv',
-            'mortality.csv'
-        ]
-        o = Path('experiments/usa/batch_10/')
-        o.mkdir(parents=True, exist_ok=True)
-        g = lambda x: x + np.random.normal(0.1 * x, 0.05 * x)
-        for pickle_file, csv_file in zip(pickle_files, csv_files):
-            df = pd.read_pickle(pickle_file)
-            df['Run Value'] = df['Run Value'].apply(g)
-            df.to_csv(o / csv_file, index=False)
+    # if args.country == "usa":
+    #     d = Path('experiments/usa/transition_dictionaries/')
+    #     pickle_files = sorted(d.glob('*p[1-3]*.pickle'))
+    #     csv_files = [
+    #         'cervical_cancer_incidence.csv',
+    #         'hpv_cin_prevalence.csv',
+    #         'mortality.csv'
+    #     ]
+    #     o = Path('experiments/usa/batch_10/')
+    #     o.mkdir(parents=True, exist_ok=True)
+    #     g = lambda x: x + np.random.normal(0.1 * x, 0.05 * x)
+    #     for pickle_file, csv_file in zip(pickle_files, csv_files):
+    #         df = pd.read_pickle(pickle_file)
+    #         df['Run Value'] = df['Run Value'].apply(g)
+    #         df.to_csv(o / csv_file, index=False)

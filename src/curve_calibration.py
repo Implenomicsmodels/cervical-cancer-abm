@@ -2,6 +2,7 @@ import argparse
 from pathlib import Path
 
 import pandas as pd
+import numpy as np
 from model.logger import LoggerFactory
 
 from src.helper_functions import multi_process, read_cm
@@ -26,6 +27,11 @@ def main(args):
 
     num_agents = 500_000
     values = [0.01, 0.05, 0.1, 0.25, 0.4, 0.6, 0.8, 1, 1.33, 1.67, 2, 2.5, 3, 3.5, 4, 4.5, 5, 7.5, 10, 12.5]
+    """ Many of the values are quite small, if the first multipliers are well-chosen,
+        so, search through a smaller, more dense set of values
+    """ 
+    #values = np.linspace(0.01, 8, 20)
+    #values = values.tolist()
 
     # ----- Start the Calibration --------------------------------------------------------------------------------------
     cm = cm.set_index("Target_Row", drop=False)
@@ -83,12 +89,22 @@ def main(args):
         results_df.columns = [i for i in range(len(cm_dict))]
         results_df = results_df.loc[cm.Target_Row.values]
 
+        logger.info(f"Shape of results_df: {results_df.shape}")
+        logger.info(f"Columns of results_df: {results_df.columns}")
+        logger.info(f"Index of results_df: {results_df.index}")
+
         # --- Model the results & predict the best performing multiplier
         for _, row in rows.iterrows():
             row_id = row.Target_Row
+            logger.info(f"Processing row_id: {row_id}")
+            logger.info(f"Shape of results_df.loc[row_id]: {results_df.loc[row_id].shape}")
             model_df = pd.DataFrame(results_df.loc[row_id])
+            logger.info(f"Shape of model_df: {model_df.shape}")
+            if model_df.shape[1] != 1:
+                logger.warning(f"Unexpected number of columns in model_df: {model_df.shape[1]}")
+                model_df = model_df.iloc[:, 0].to_frame()
             model_df.columns = ["modeled_values"]
-            model_df["multipliers"] = values
+            model_df["multipliers"] = values[:len(model_df)]
 
             target = row.Target
 

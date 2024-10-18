@@ -62,7 +62,7 @@ def main(args):
     for age in baseline.index:
         a = AgeGroup["AGE_{}".format(age)]
         for hiv in HivState:
-            # We will use 5-year survival rates for the probabilities or dying for woman who have cancer
+            # We will use 5-year survival rates for the probabilities of dying for woman who have cancer
             for cancer in CancerState:
                 p = baseline.at[age, hiv.name]
                 if cancer.value == CancerState.LOCAL:
@@ -139,15 +139,17 @@ def main(args):
             for hpv_imm in HpvImmunity:
                 for hpv_state in HpvState:
                     if hpv_state == HpvState.NORMAL:
-                        p_values = [1 - p1, p1, 0, 0, 0]
+                        p_values = [1 - p1, p1, 0, 0, 0, 0]
                     elif hpv_state == HpvState.HPV:
-                        p_values = [p4, 1 - p4 - p2 - p3, p2, p3, 0]
+                        p_values = [p4, 1 - p4 - p2 - p3, p2, p3/2, p3/2, 0]
                     elif hpv_state == HpvState.CIN_1:
-                        p_values = [p7, p6, 1 - p7 - p6 - p5, p5, 0]
-                    elif hpv_state == HpvState.CIN_2_3:
-                        p_values = [p11, p10, p9, 1 - p11 - p10 - p9 - p8, p8]
+                        p_values = [p7, p6, 1 - p7 - p6 - p5, p5/2, p5/2, 0]
+                    elif hpv_state == HpvState.CIN_2:
+                        p_values = [p11/2, p10/2, p9/2, 1 - p11/2 - p10/2 - p9/2 - p8/2, p8/4, p8/4]
+                    elif hpv_state == HpvState.CIN_3:
+                        p_values = [p11/2, p10/2, p9/2, 0, 1 - p11/2 - p10/2 - p9/2 - p8/2, p8/2]
                     elif hpv_state == HpvState.CANCER:
-                        p_values = [0, 0, 0, 0, 1]
+                        p_values = [0, 0, 0, 0, 0, 1]
 
                     for hiv_status in HivState:
                         key = (a.value, hpv_strain.value, hpv_imm.value, hpv_state.value, hiv_status.value)

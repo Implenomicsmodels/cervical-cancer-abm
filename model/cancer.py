@@ -24,6 +24,7 @@ class Cancer(EventState):
         # Everyone starts out cancer free
         self.initiate(count=self.model.params.num_agents, state=CancerState.NORMAL, dtype=np.int8)
 
+
     def step(self):
         """ Simulate progression through the cancer states: Must be living, be LOCAL or REGIONAL, and not be detected
             Note: Transition from Normal to Cancer is handled elsewhere
